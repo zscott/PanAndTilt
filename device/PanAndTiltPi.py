@@ -87,8 +87,8 @@ class PanTiltDevice:
         self.pwm = PWM(0x40)
         self.pwm.setPWMFreq(10)  # Set frequency to 60 Hz
         # self.panServo = Servo("pan", self.pwm, self.PAN_SERVO_CHANNEL, 280, 660, 0.2, 0.003)
-        self.panServo = Servo("pan", self.pwm, self.PAN_SERVO_CHANNEL, 120, 700, 0.6, 0.01)
-        self.tiltServo = Servo("tilt", self.pwm, self.TILT_SERVO_CHANNEL, 320, 650, 0.6, 0.005)
+        self.panServo = Servo("pan", self.pwm, self.PAN_SERVO_CHANNEL, 120, 700, 0.3, 0.01)
+        self.tiltServo = Servo("tilt", self.pwm, self.TILT_SERVO_CHANNEL, 320, 650, 0.3, 0.02)
         self.panTarget = 50
         self.tiltTarget = 50
         self.init()
