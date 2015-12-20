@@ -4,7 +4,6 @@ import random
 import threading
 import time
 import socket
-import sys
 
 from Adafruit_PWM_Servo_Driver import PWM
 
@@ -30,7 +29,7 @@ class Servo:
                 # a = (-v1)/2d
                 if self.currentSpeed > self.maxRecordedSpeed:
                     self.maxRecordedSpeed = self.currentSpeed
-                    # print "%s: speed = %s" % (self.name, self.currentSpeed)
+                    print "%s: speed = %s" % (self.name, self.currentSpeed)
 
                 if self.currentSpeed/(2 * self.distanceToMove()) >= self.acceleration:
                     self.currentSpeed -= self.acceleration
@@ -86,9 +85,8 @@ class PanTiltDevice:
     def __init__(self):
         self.pwm = PWM(0x40)
         self.pwm.setPWMFreq(10)  # Set frequency to 60 Hz
-        # self.panServo = Servo("pan", self.pwm, self.PAN_SERVO_CHANNEL, 280, 660, 0.2, 0.003)
-        self.panServo = Servo("pan", self.pwm, self.PAN_SERVO_CHANNEL, 120, 700, 0.6, 0.01)
-        self.tiltServo = Servo("tilt", self.pwm, self.TILT_SERVO_CHANNEL, 320, 650, 0.6, 0.005)
+        self.panServo = Servo("pan", self.pwm, self.PAN_SERVO_CHANNEL, 180, 630, 0.2, 0.003)
+        self.tiltServo = Servo("tilt", self.pwm, self.TILT_SERVO_CHANNEL, 450, 600, 0.4, 0.005)
         self.panTarget = 50
         self.tiltTarget = 50
         self.init()
@@ -98,11 +96,11 @@ class PanTiltDevice:
 
     def pan(self, percent):
         self.panTarget = percent
-        # print "panning to %d percent" % self.panTarget
+        print "panning to %d percent" % self.panTarget
         self.panServo.setTargetPosition(self.panTarget)
 
     def tilt(self, percent):
-        # print "tilting to %d percent" % percent
+        print "tilting to %d percent" % percent
         self.tiltServo.setTargetPosition(percent)
 
     def panAndTilt(self, panPercent, tiltPercent):
@@ -110,47 +108,24 @@ class PanTiltDevice:
         self.tilt(tiltPercent)
 
 
-class RemotePanTiltController:
+panTilt = PanTiltDevice()
 
-    def __init__(self, panTilt):
-        # self.HOST = '192.168.1.21'
-        self.HOST = '107.178.212.200'
-        self.PORT = 5000
-        self.panTilt = panTilt
-        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    def connect(self):
-        self.client_socket.connect((self.HOST, self.PORT))
-        print "connected to remote pan and tilt controller %s:%d" % (self.HOST, self.PORT)
-
-    def streamCommands(self):
-        msgLen = 2
-
-        while True:
-            bytes_recvd = 0
-            chunks = []
-            while bytes_recvd < msgLen:
-                chunk = self.client_socket.recv(min(msgLen - bytes_recvd, 2048))
-                if chunk == '':
-                    raise RuntimeError("socket connection broken")
-                chunks.append(chunk)
-                bytes_recvd += len(chunk)
-
-            msg = ''.join(chunks)
-            pan = ord(msg[0])
-            tilt = ord(msg[1])
-            panTilt.panAndTilt(pan, tilt)
-
-
+# panTilt.pan(50)
+# panTilt.tilt(0)
 
 while True:
-    try:
-        panTilt = PanTiltDevice()
-        remote = RemotePanTiltController(panTilt)
-        remote.connect()
-        remote.streamCommands()
-    except:
-        print "error"
+    tilt = int(random.random() * 100)
+    pan = int(random.random() * 100)
+    sleep = random.random() * 0.5 + 5.5
+    panTilt.panAndTilt(pan, tilt)
+    time.sleep(sleep)
 
-    time.sleep(5)
-
+    # for pct in range(0, 100, 10):
+    #     panTilt.pan(pct)
+    #     panTilt.tilt(pct)
+    #     time.sleep(0.5)
+    #
+    # for pct in range(100, 0, -10):
+    #     panTilt.pan(pct)
+    #     panTilt.tilt(pct)
+    #     time.sleep(0.2)
