@@ -1,36 +1,4 @@
-$("#panTiltForm").submit(function(e) {
-    $.ajax({
-        type: "POST",
-        url: '/position',
-        data: $("#panTiltForm").serialize(),
-        success: function(data) {
-        }
-    });
-    e.preventDefault();
-});
 
-var mousedown = false;
-
-$("#canvas").mousedown(function(event) {
-    mousedown = true;
-    $(this).addClass("mouseDown");
-    updatePosition(event);
-});
-
-$("#canvas").bind("touchstart", function(event) {
-    mousedown = true;
-    event.preventDefault();
-});
-
-$("#canvas").mouseup(function(event) {
-    mousedown = false;
-    $(this).removeClass("mouseDown");
-});
-
-$("#canvas").bind("touchend", function(event) {
-   mousedown = false;
-    event.preventDefault();
-});
 
 var getPosition = function(event, canvas) {
   var x, y;
@@ -43,23 +11,6 @@ var getPosition = function(event, canvas) {
     }
     return { x: x - canvas.offsetLeft, y: y - canvas.offsetTop };
 };
-
-$("#canvas").bind("touchmove", function(event) {
-   if (mousedown) {
-       var touchobj = event.changedTouches[0];
-       var canvas = $("#canvas")[0];
-       var position = getPosition(event, canvas);
-       updatePosition(position.x, position.y);
-       event.preventDefault();
-   }
-});
-
-
-$("#canvas").mousemove(function(event) {
-    if (mousedown) {
-        updatePosition(event.offsetX, event.offsetY);
-    }
-});
 
 var updatePosition = function(x, y) {
     event = event || window.event;
@@ -75,3 +26,59 @@ var updatePosition = function(x, y) {
         data: {pan: pan, tilt: tilt}
     });
 };
+var canvas = document.getElementById("canvas");
+
+var touchMove = function(event) {
+    var touchobj = event.targetTouches[0];
+    var position = getPosition(touchobj, canvas);
+    updatePosition(position.x, position.y);
+};
+
+$canvas = $("#canvas");
+$canvas.unbind();
+
+var resizeCanvas = function() {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+        document.body.style.margin = "0";
+        document.body.style.padding = "0";
+        canvas.style.left = "0px";
+        canvas.style.top = "0px";
+        canvas.style.display = "block";
+        canvas.style.position = "absolute";
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+};
+resizeCanvas();
+window.onorientationchange = resizeCanvas;
+
+canvas.addEventListener("touchstart", touchMove, false);
+canvas.addEventListener("touchmove", touchMove, false);
+canvas.addEventListener("touchend", touchMove, false);
+
+canvas.addEventListener("touchmove", function(event) {
+    event.preventDefault();
+}, false);
+
+
+var mousedown = false;
+
+$canvas.mousedown(function(event) {
+    mousedown = true;
+    $(this).addClass("mouseDown");
+    updatePosition(event.offsetX, event.offsetY);
+});
+
+$canvas.mouseup( function(event) {
+    mousedown = false;
+    $(this).removeClass("mouseDown");
+});
+
+
+$canvas.mousemove(function(event) {
+    if (mousedown) {
+        updatePosition(event.offsetX, event.offsetY);
+    }
+});
+
+
