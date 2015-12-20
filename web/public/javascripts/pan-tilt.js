@@ -11,9 +11,23 @@ $("#panTiltForm").submit(function(e) {
 
 var mousedown = false;
 
+$("#canvas").mousedown(function(event) {
+    mousedown = true;
+    $(this).addClass("mouseDown");
+    updatePosition(event);
+});
+
+$("#canvas").bind("touchstart", function(event) {
+    mousedown = true;
+});
+
 $("#canvas").mouseup(function(event) {
     mousedown = false;
     $(this).removeClass("mouseDown");
+});
+
+$("#canvas").bind("touchend", function(event) {
+   mousedown = false;
 });
 
 
@@ -21,12 +35,6 @@ $("#canvas").mousemove(function(event) {
     if (mousedown) {
         updatePosition(event);
     }
-});
-
-$("#canvas").mousedown(function(event) {
-    mousedown = true;
-    $(this).addClass("mouseDown");
-    updatePosition(event);
 });
 
 var updatePosition = function(event) {

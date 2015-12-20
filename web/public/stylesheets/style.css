@@ -1,29 +1,30 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    overflow: hidden;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
 }
 
 .cards {
-  display: flex;
-  flex-direction: column;
-  max-width: 672px;
-  margin-left: auto;
-  margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    max-width: 672px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 paper-card.card-content {
-  padding: 16px;
-  position: relative;
+    padding: 16px;
+    position: relative;
 }
 
 #canvas {
-  background-color: #ddd;
+    background-color: #ddd;
 }
 
 .mouseDown {
-  cursor:move;
+    cursor: move;
 }
