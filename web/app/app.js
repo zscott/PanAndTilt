@@ -12,7 +12,12 @@ var position = require('./routes/position');
 
 var app = express();
 
-app.listen(8888);
+var APP_HOST = "0.0.0.0";
+var APP_PORT = 8888;
+
+app.listen(APP_PORT, APP_HOST, function() {
+    console.log("Web server listening on " + APP_HOST + ":" + APP_PORT);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

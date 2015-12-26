@@ -9,7 +9,7 @@ var socket;
 var sendRandomPanTiltCommand = function(sock) {
     var pan = String.fromCharCode((Math.random() * 100));
     var tilt = String.fromCharCode((Math.random() * 100));
-    sock.write(pan + tilt)
+    sock.write(pan + tilt);
 };
 
 var server;
@@ -21,13 +21,6 @@ var createServer = function() {
     server = net.createServer(function(sock) {
         console.log('CONNECTED: ' + sock.remoteAddress + ":" + sock.remotePort);
         socket = sock;
-        //interval = setInterval(sendRandomPanTiltCommand, 5000, sock)
-
-        sock.on('error', function() {
-            console.log('error');
-            //socket.destroy();
-            //socket = null;
-        });
 
         sock.on('data', function(data) {
             console.log('DATA ' + sock.remoteAddress + ': ' + data);
@@ -35,15 +28,14 @@ var createServer = function() {
 
         sock.on('close', function(data) {
             console.log('CLOSED: ' + sock.remoteAddress + ' ' + sock.remotePort);
+            createServer();
         });
 
     });
 
     server.listen(PORT, HOST, function() {
-        console.log('Server listening for connection from PI on ' + HOST + ':' + PORT);
+        console.log('Bot server listening on ' + HOST + ':' + PORT);
     });
-
-    //serverSocketCreateInterval = setInterval(createServer, 10000);
 };
 
 createServer();
