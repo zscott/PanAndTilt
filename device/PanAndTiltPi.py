@@ -113,8 +113,7 @@ class PanTiltDevice:
 class RemotePanTiltController:
 
     def __init__(self, panTilt):
-        # self.HOST = '192.168.1.21'
-        self.HOST = '107.178.212.200'
+        self.HOST = '104.197.47.145'
         self.PORT = 5000
         self.panTilt = panTilt
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
