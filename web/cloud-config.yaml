@@ -1,0 +1,32 @@
+#cloud-config
+
+coreos:
+  etcd2:
+    # generate a new token for each unique cluster from https://discovery.etcd.io/new?size=2
+    # specify the intial size of your cluster with ?size=X
+
+    # token was generated with size=2
+    discovery: "https://discovery.etcd.io/f69562933cbec59c725bc54f01af0b9a"
+
+    # multi-region and multi-cloud deployments need to use $public_ipv4
+    advertise-client-urls: "http://$public_ipv4:2379"
+    initial-advertise-peer-urls: "http://$private_ipv4:2380"
+
+    # listen on both the official ports and the legacy ports
+    # legacy ports can be omitted if your application doesn't depend on them
+    listen-client-urls: "http://0.0.0.0:2379,http://0.0.0.0:4001"
+    listen-peer-urls: "http://$private_ipv4:2380,http://$private_ipv4:7001"
+  units:
+    - name: etcd2.service
+      command: start
+    - name: fleet.service
+      command: start
+write_files:
+  - path: /home/core/docker_login.sh
+    owner: core:core
+    permissions: 0755
+    encoding: "gzip+base64"
+    content: |
+      H4sICDOyfFYAA2RvY2tlcl9sb2dpbi5zaAClj8FKxDAURff5iqcWqov0IbgaKFhqVZDRRYvbEpM3nTCZpCQvXfnxDjpF9+7vPefeqwv8sB7TXohtNzQPzdDUe+Z5g3gkVkaxqqYQJkeV9UzRK1ehDsc5M23PAVxuRf/ejk3bDnWxYtD6xMprwkRxsZqk0jpkzwkN7VR2LE6Fru/H4e2le62La52jA/kM5QqWj04tIW7g6XtBCcWqQQ4H8vAJOjNIU16WIHdwdyOECfpAEVyYrAdJ4APfL6fR1oDMMP705AzFXzmcL086Vjb8g5F+IeIL/FLtzVsBAAA=
+
+
