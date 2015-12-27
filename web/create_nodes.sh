@@ -6,7 +6,7 @@ sed "s|{DISCOVERY_TOKEN}|$TOKEN|g" < cloud-config-template.yaml > cloud-config.y
 
 CMD="gcloud compute instances create pan-node1 pan-node2 pan-node3 \
 	--image https://www.googleapis.com/compute/v1/projects/coreos-cloud/global/images/coreos-stable-835-9-0-v20151208 \
-	--machine-type n1-highcpu-4 \
+	--machine-type f1-micro \
 	--tags http-server,bot-server,pan-node \
 	--scopes 'https://www.googleapis.com/auth/cloud-platform' \
 	--metadata-from-file user-data=cloud-config.yaml"

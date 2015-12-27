@@ -6,12 +6,6 @@ var HOST = '0.0.0.0';
 var PORT = 5000;
 var socket;
 
-var sendRandomPanTiltCommand = function(sock) {
-    var pan = String.fromCharCode((Math.random() * 100));
-    var tilt = String.fromCharCode((Math.random() * 100));
-    sock.write(pan + tilt);
-};
-
 var server;
 var serverSocketCreateInterval;
 
