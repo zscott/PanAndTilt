@@ -45,7 +45,7 @@ router.post('/', function(req, res, next) {
     var pan = req.body.pan;
     var tilt = req.body.tilt;
     var encoded = String.fromCharCode(parseInt(pan)) + String.fromCharCode(parseInt(tilt));
-    console.log("sending command pan=" + pan + " tilt=" + tilt);
+    //console.log("sending command pan=" + pan + " tilt=" + tilt);
     if (socket) {
         socket.write(encoded);
     }

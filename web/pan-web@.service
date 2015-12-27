@@ -7,6 +7,7 @@ Requires=docker.service
 User=core
 ExecStartPre=/home/core/docker_login.sh
 ExecStartPre=/usr/bin/docker pull gcr.io/strong-pursuit-722/pan-web
+#ExecStartPre=/bin/sh -c 'for n in $(/usr/bin/docker ps --filter "name=pan-web" --format "{{.Names}}"); do /usr/bin/docker rm -f $n; done;'
 ExecStart=/usr/bin/docker run --name pan-web --rm -p 80:8888 -p 5000:5000 gcr.io/strong-pursuit-722/pan-web
 ExecStop=/usr/bin/docker kill pan-web
 ExecStop=/usr/bin/docker rm pan-web
